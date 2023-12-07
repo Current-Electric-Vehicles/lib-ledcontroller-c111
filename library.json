@@ -1,0 +1,18 @@
+{
+    "name": "led-controller",
+    "version": "1.0.0",
+    "description": "Arduino / PlatformIO library for the Current Electric Vehicles LED Controller (C111)",
+    "license": "MIT",
+    "homepage": "https://github.com/Current-Electric-Vehicles/led-controller",
+    "frameworks": "arduino",
+    "platforms": "espressif32",
+    "scripts": {
+        "preinstall": "install-board.py"
+    },
+    "dependencies": {
+        "FastLED": "*",
+        "Arduino-TMP1075": "https://github.com/PatrickBaus/Arduino-TMP1075",
+        "arduino-CAN": "https://github.com/sandeepmistry/arduino-CAN"
+    }
+  }
+  
