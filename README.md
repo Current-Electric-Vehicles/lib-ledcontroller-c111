@@ -41,7 +41,7 @@ To install the board.json file for this board, clone the repository and run `ins
 
 You will then be able to use the board in your platformio projects as so:
 
-```
+```ini
 
 [platformio]
 default_envs = default
