@@ -6,7 +6,7 @@ Add the dependency to your platformio.ini:
 
 ```
 lib_deps =
-    LEDController=https://github.com/Current-Electric-Vehicles/led-controller.git
+    LEDController=https://github.com/Current-Electric-Vehicles/lib-ledcontroller-c111.git
 ```
 
 Use the controller in your code:
@@ -49,7 +49,7 @@ default_envs = default
 [env]
 board = c111-ledcontroller
 lib_deps =
-    LEDController=https://github.com/Current-Electric-Vehicles/led-controller.git
+    LEDController=https://github.com/Current-Electric-Vehicles/lib-ledcontroller-c111.git
 ```
 
 However this is optional, and the `esp32dev` board that is packaged with platformio works as well.

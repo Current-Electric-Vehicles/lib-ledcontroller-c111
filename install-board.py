@@ -14,16 +14,18 @@ def main():
         print("ERROR: Platforms directory not found: {platforms_dir}".format(platforms_dir=platforms_dir))
         sys.exit(100)
         return
+    
+    for dir in os.listdir(platforms_dir):
+        if not dir.startswith("espressif32"):
+            continue
+        platform_dir = os.path.join(platforms_dir, dir, "boards")
+        if not os.path.exists(platform_dir):
+            os.makedirs(platform_dir, exist_ok=True)
+            print("Made directory: {platform_dir}".format(platform_dir=platform_dir))
 
-    platform_dir = os.path.join(platforms_dir, "espressif32/boards")
-    if not os.path.exists(platform_dir):
-        os.makedirs(platform_dir, exist_ok=True)
-        print("Made directory: {platform_dir}".format(platform_dir=platform_dir))
-
-    board_file = os.path.join(platform_dir, "c111-ledcontroller.json")
-    shutil.copy("./board.json", board_file)
-    print("Coppied board file to: {board_file}".format(board_file=board_file))
+        board_file = os.path.join(platform_dir, "c111-ledcontroller.json")
+        shutil.copy("./board.json", board_file)
+        print("Coppied board file to: {board_file}".format(board_file=board_file))
 
 if __name__ == "__main__":
     main()
-
