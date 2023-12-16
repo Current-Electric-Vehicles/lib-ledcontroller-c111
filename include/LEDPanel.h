@@ -37,7 +37,7 @@ public:
     uint16_t getWidth();
     uint16_t getHeight();
 
-    void init(LEDStrip& strip, StripDirection direction, CRGB* leds);
+    void init(LEDStrip& strip, uint16_t stripOffset, StripDirection direction, CRGB* leds, uint16_t ledsOffset);
     void dumpDebug();
     
 private:

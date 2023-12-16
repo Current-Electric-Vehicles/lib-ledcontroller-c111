@@ -71,10 +71,10 @@ uint16_t LEDPanel::getHeight() {
     return this->height;
 }
 
-void LEDPanel::init(LEDStrip& strip, StripDirection direction, CRGB* leds) {
+void LEDPanel::init(LEDStrip& strip, uint16_t stripOffset, StripDirection direction, CRGB* leds, uint16_t ledsOffset) {
 
-    int stripIndex = 0;
-    int pixelIndex = 0;
+    int stripIndex = stripOffset;
+    int pixelIndex = ledsOffset;
     auto nextPixel = [&stripIndex, &pixelIndex, &strip, leds]() -> CRGB* {
         CRGB* ret = nullptr;
         if (strip.getPixelAt(stripIndex)) {
@@ -115,7 +115,6 @@ void LEDPanel::init(LEDStrip& strip, StripDirection direction, CRGB* leds) {
                 }
             }
             break;
-
         case StripDirection::LEFT_TO_RIGHT__TOP_TO_BOTTOM:
             for (int16_t y = 0; y < this->height; y++) {
                 for (uint16_t x = 0; x < this->width; x++) {
