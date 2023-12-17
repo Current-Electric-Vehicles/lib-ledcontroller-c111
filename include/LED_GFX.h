@@ -5,18 +5,18 @@
 class LEDPanel;
 
 #include <Adafruit_GFX.h>
-#include "LEDPanel.h"
+#include "LED_Panel.h"
 
 class LED_GFX : public Adafruit_GFX {
 public:
 
-    LED_GFX(LEDPanel* panel);
+    LED_GFX(LED_Panel* panel);
     ~LED_GFX();
 
     void drawPixel(int16_t x, int16_t y, uint16_t color);
 
 private:
-    LEDPanel* panel;
+    LED_Panel* panel;
 };
 
 inline CRGB fromRgb565(uint16_t color) {

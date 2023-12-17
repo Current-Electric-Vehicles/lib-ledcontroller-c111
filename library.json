@@ -9,6 +9,14 @@
     "scripts": {
         "preinstall": "install-board.py"
     },
+    "build": {
+        "flags": [
+            "-std=gnu++17"
+        ],
+        "unflags": [
+            "-std=gnu++11"
+        ]
+    },
     "dependencies": {
         "FastLED": "*",
         "Adafruit-GFX-Library": "adafruit/Adafruit GFX Library@1.11.9",

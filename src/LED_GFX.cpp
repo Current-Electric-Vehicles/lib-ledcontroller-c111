@@ -1,7 +1,7 @@
 
 #include "LED_GFX.h"
 
-LED_GFX::LED_GFX(LEDPanel* panel):
+LED_GFX::LED_GFX(LED_Panel* panel):
     Adafruit_GFX(panel->getWidth(), panel->getHeight()),
     panel(panel) {
 

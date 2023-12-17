@@ -1,25 +1,17 @@
 
 #include "LED_Strip.h"
 
+#include "LED_Factory.h"
+
 LED_Strip::LED_Strip(LED_StripDefinition& def):
     def(def),
     leds(0) {
 
-}
-
-LED_Strip::~LED_Strip() {
-    this->deInit();
-}
-
-void LED_Strip::init() {
-    if (this->controller != nullptr) {
-        return;
-    }
     this->leds.resize(this->def.count, 0);
     this->controller = &createController(&this->def, this->leds.data());
 }
 
-void LED_Strip::deInit() {
+LED_Strip::~LED_Strip() {
     if (this->controller != nullptr) {
         delete this->controller;
         this->controller = nullptr;
@@ -33,8 +25,9 @@ LED_StripDefinition& LED_Strip::getDefinition() {
 }
 
 CRGB* LED_Strip::getLeds() {
-    if (!this->leds.size() == this->def.count) {
-        return nullptr;
-    }
     return this->leds.data();
+}
+
+CRGB* LED_Strip::getPixelAt(uint16_t index) {
+    return &this->leds[index];
 }

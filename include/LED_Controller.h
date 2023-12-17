@@ -4,6 +4,6 @@
 
 #include "C111.h"
 
-using LEDController = C111;
+using LED_Controller = C111;
 
 #endif
