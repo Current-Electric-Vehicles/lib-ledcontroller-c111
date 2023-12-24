@@ -102,7 +102,7 @@ void LED_Panel::dumpDebug() {
     for (uint16_t y = 0; y < this->def.height; y++) {
         Serial.print("|");
         for (uint16_t x = 0; x < this->def.width; x++) {
-            if (this->getMappedPixelAt(x, y) == nullptr) {
+            if (this->getMappedPixelAt(x, y)->stripId == INVALID_STRIP_ID) {
                 Serial.print(" ");
             } else {
                 Serial.print("X");
