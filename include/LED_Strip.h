@@ -6,6 +6,8 @@
 #include <FastLED.h>
 #include <vector>
 
+#define INVALID_STRIP_ID ((uint8_t)UINT8_MAX)
+
 enum PixelType {
     T_NEOPIXEL        = 0,
     T_SM16703         = 1,
@@ -52,11 +54,14 @@ public:
     ~LED_Strip();
 
     LED_StripDefinition& getDefinition();
+    uint8_t getId();
+    void setId(uint8_t id);
 
     CRGB* getLeds();
     CRGB* getPixelAt(uint16_t index);
 
 private:
+    uint8_t id;
     LED_StripDefinition def;
     CLEDController* controller;
     std::vector<CRGB> leds;

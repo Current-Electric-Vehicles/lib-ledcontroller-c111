@@ -4,6 +4,7 @@
 #include "LED_Factory.h"
 
 LED_Strip::LED_Strip(LED_StripDefinition& def):
+    id(UINT8_MAX),
     def(def),
     leds(0) {
 
@@ -22,6 +23,14 @@ LED_Strip::~LED_Strip() {
 
 LED_StripDefinition& LED_Strip::getDefinition() {
     return this->def;
+}
+
+uint8_t LED_Strip::getId() {
+    return this->id;
+}
+
+void LED_Strip::setId(uint8_t id) {
+    this->id = id;
 }
 
 CRGB* LED_Strip::getLeds() {

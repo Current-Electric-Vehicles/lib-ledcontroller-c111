@@ -1,6 +1,7 @@
 
 #include "LED_Manager.h"
 
+LED_Manager LED_MANAGER;
 
 LED_Manager::LED_Manager():
     strips(),
@@ -12,9 +13,26 @@ LED_Manager::~LED_Manager() {
     
 }
 
-uint8_t LED_Manager::addStrip(LED_StripDefinition& definition) {
-    uint8_t ret = this->strips.size();
+void LED_Manager::unload() {
+    this->panels.clear();
+    this->panels.shrink_to_fit();
+    this->strips.clear();
+    this->strips.shrink_to_fit();
+}
+
+void LED_Manager::load(String& jsonFile) {
+
+}
+
+void LED_Manager::save(String& jsonFile) {
+
+}
+
+LED_Strip* LED_Manager::addStrip(LED_StripDefinition& definition) {
+    uint8_t id = this->strips.size();
     this->strips.emplace_back(definition);
+    LED_Strip* ret = &this->strips[id];
+    ret->setId(id);
     return ret;
 }
 
@@ -34,9 +52,11 @@ LED_Strip* LED_Manager::getStripByName(String& name) {
     return nullptr;
 }
 
-uint8_t LED_Manager::addPanel(LED_PanelDefinition& definition) {
-    uint8_t ret = this->panels.size();
+LED_Panel* LED_Manager::addPanel(LED_PanelDefinition& definition) {
+    uint8_t id = this->panels.size();
     this->panels.emplace_back(definition);
+    LED_Panel* ret = &this->panels[id];
+    ret->setId(id);
     return ret;
 }
 

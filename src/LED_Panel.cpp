@@ -2,10 +2,11 @@
 #include "LED_Panel.h"
 
 LED_Panel::LED_Panel(LED_PanelDefinition& def):
+    id(UINT8_MAX),
     def(def),
     leds() {
 
-    this->leds.resize(def.width * def.height, 0);
+    this->leds.resize(def.width * def.height, {INVALID_PANEL_ID, UINT16_MAX, 0});
     this->leds.shrink_to_fit();
 }
 
@@ -17,57 +18,68 @@ LED_PanelDefinition& LED_Panel::getDefinition() {
     return this->def;
 }
 
-CRGB* LED_Panel::getMappedPixelAt(uint16_t x, uint16_t y) {
+uint8_t LED_Panel::getId() {
+    return this->id;
+}
+
+void LED_Panel::setId(uint8_t id) {
+    this->id = id;
+}
+
+LED_MappedPixel* LED_Panel::getMappedPixelAt(uint16_t x, uint16_t y) {
     uint16_t index = (y * this->def.width) + x;
     if (index >= this->leds.size()) {
         return nullptr;
     }
-    return this->leds[index];
+    return &this->leds[index];
 }
 
-void LED_Panel::mapPixelAt(uint16_t x, uint16_t y, CRGB* pixel) {
-    uint16_t index = (y * this->def.width) + x;
-    if (index >= this->leds.size()) {
-        return;
+LED_MappedPixel* LED_Panel::mapPixelAt(uint16_t x, uint16_t y, LED_Strip* strip, uint16_t pixelIndex) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
+        return nullptr;
     }
-    this->leds[index] = pixel;
+    mp->stripId = strip->getId();
+    mp->pixelIndex = pixelIndex;
+    mp->pixel = strip->getPixelAt(pixelIndex);
+    return mp;
 }
 
 void LED_Panel::setPixelAt(uint16_t x, uint16_t y, CRGB* pixel) {
-    uint16_t index = (y * this->def.width) + x;
-    if (index >= this->leds.size()) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
         return;
     }
-    *this->leds[index] = *pixel;
+    *mp->pixel = *pixel;
 }
 
 void LED_Panel::setPixelAt(uint16_t x, uint16_t y, CRGB pixel) {
-    uint16_t index = (y * this->def.width) + x;
-    if (index >= this->leds.size()) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
         return;
     }
-    *this->leds[index] = pixel;
+    *mp->pixel = pixel;
 }
 
 bool LED_Panel::setNonEmptyPixelAt(uint16_t x, uint16_t y, CRGB* pixel) {
-    uint16_t index = (y * this->def.width) + x;
-    if (index >= this->leds.size()) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
         return false;
-    } else if (this->leds[index] == nullptr) {
+    } else if (mp->stripId == INVALID_STRIP_ID) {
         return false;
     }
-    *this->leds[index] = *pixel;
+    *mp->pixel = *pixel;
     return true;
 }
 
 bool LED_Panel::setNonEmptyPixelAt(uint16_t x, uint16_t y, CRGB pixel) {
-    uint16_t index = (y * this->def.width) + x;
-    if (index >= this->leds.size()) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
         return false;
-    } else if (this->leds[index] == nullptr) {
+    } else if (mp->stripId == INVALID_STRIP_ID) {
         return false;
     }
-    *this->leds[index] = pixel;
+    *mp->pixel = pixel;
     return true;
 }
 

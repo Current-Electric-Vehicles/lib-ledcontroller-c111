@@ -14,11 +14,15 @@ public:
     LED_Manager();
     ~LED_Manager();
 
-    uint8_t addStrip(LED_StripDefinition& definition);
+    void unload();
+    void load(String& jsonFile);
+    void save(String& jsonFile);
+
+    LED_Strip* addStrip(LED_StripDefinition& definition);
     LED_Strip* getStripByIndex(uint8_t index);
     LED_Strip* getStripByName(String& name);
 
-    uint8_t addPanel(LED_PanelDefinition& definition);
+    LED_Panel* addPanel(LED_PanelDefinition& definition);
     LED_Panel* getPanelByIndex(uint8_t index);
     LED_Panel* getPanelByName(String& name);
 
@@ -26,5 +30,7 @@ private:
     std::vector<LED_Strip> strips;
     std::vector<LED_Panel> panels;
 };
+
+extern LED_Manager LED_MANAGER;
 
 #endif
