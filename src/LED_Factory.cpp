@@ -1,12 +1,15 @@
 
 #include "LED_Factory.h"
 
+#include <Arduino.h>
+
 #include "C111_Pinout.h"
 
 CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_DIFF_1_OR_SINGLE_ENDED_1) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RGB>(leds, def->offset, def->count);
@@ -37,8 +40,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RBG>(leds, def->offset, def->count);
@@ -69,8 +76,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GRB>(leds, def->offset, def->count);
@@ -101,8 +112,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GBR>(leds, def->offset, def->count);
@@ -133,8 +148,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BRG>(leds, def->offset, def->count);
@@ -165,8 +184,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BGR>(leds, def->offset, def->count);
@@ -197,6 +220,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_1_OR_SINGLE_ENDED_1, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
 
@@ -204,6 +230,7 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_DIFF_2_OR_SINGLE_ENDED_2) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RGB>(leds, def->offset, def->count);
@@ -234,8 +261,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RBG>(leds, def->offset, def->count);
@@ -266,8 +297,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GRB>(leds, def->offset, def->count);
@@ -298,8 +333,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GBR>(leds, def->offset, def->count);
@@ -330,8 +369,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BRG>(leds, def->offset, def->count);
@@ -362,8 +405,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BGR>(leds, def->offset, def->count);
@@ -394,6 +441,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_DIFF_2_OR_SINGLE_ENDED_2, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
 
@@ -401,6 +451,7 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_SINGLE_ENDED_3) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, RGB>(leds, def->offset, def->count);
@@ -431,8 +482,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, RBG>(leds, def->offset, def->count);
@@ -463,8 +518,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, GRB>(leds, def->offset, def->count);
@@ -495,8 +554,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, GBR>(leds, def->offset, def->count);
@@ -527,8 +590,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, BRG>(leds, def->offset, def->count);
@@ -559,8 +626,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_3>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_3, BGR>(leds, def->offset, def->count);
@@ -591,6 +662,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_3, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_3, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
 
@@ -598,6 +672,7 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_SINGLE_ENDED_4) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, RGB>(leds, def->offset, def->count);
@@ -628,8 +703,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, RBG>(leds, def->offset, def->count);
@@ -660,8 +739,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, GRB>(leds, def->offset, def->count);
@@ -692,8 +775,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, GBR>(leds, def->offset, def->count);
@@ -724,8 +811,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, BRG>(leds, def->offset, def->count);
@@ -756,8 +847,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_4>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_4, BGR>(leds, def->offset, def->count);
@@ -788,6 +883,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_4, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_4, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
 
@@ -795,6 +893,7 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_SINGLE_ENDED_5) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, RGB>(leds, def->offset, def->count);
@@ -825,8 +924,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, RBG>(leds, def->offset, def->count);
@@ -857,8 +960,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, GRB>(leds, def->offset, def->count);
@@ -889,8 +996,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, GBR>(leds, def->offset, def->count);
@@ -921,8 +1032,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, BRG>(leds, def->offset, def->count);
@@ -953,8 +1068,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_5>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_5, BGR>(leds, def->offset, def->count);
@@ -985,6 +1104,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_5, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_5, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
 
@@ -992,6 +1114,7 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
 
     if (def->pin == C111_ESP_SINGLE_ENDED_6) {
         if (def->rgbOrder == RGB) {
+            #ifdef LED_FACTORY_RGB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, RGB>(leds, def->offset, def->count);
@@ -1022,8 +1145,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, RGB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, RGB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RGB NOT DEFINED");
+            #endif
 
         } else if (def->rgbOrder == RBG) {
+            #ifdef LED_FACTORY_RBG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, RBG>(leds, def->offset, def->count);
@@ -1054,8 +1181,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, RBG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, RBG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_RBG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GRB) {
+            #ifdef LED_FACTORY_GRB
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, GRB>(leds, def->offset, def->count);
@@ -1086,8 +1217,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, GRB>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, GRB>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GRB NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == GBR) {
+            #ifdef LED_FACTORY_GBR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, GBR>(leds, def->offset, def->count);
@@ -1118,8 +1253,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, GBR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, GBR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_GBR NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BRG) {
+            #ifdef LED_FACTORY_BRG
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, BRG>(leds, def->offset, def->count);
@@ -1150,8 +1289,12 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, BRG>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, BRG>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BRG NOT DEFINED");
+            #endif
             
         } else if (def->rgbOrder == BGR) {
+            #ifdef LED_FACTORY_BGR
             switch (def->pixelType) {
                 case T_NEOPIXEL:                return FastLED.addLeds<NEOPIXEL, C111_ESP_SINGLE_ENDED_6>(leds, def->offset, def->count);
                 case T_SM16703:                 return FastLED.addLeds<SM16703, C111_ESP_SINGLE_ENDED_6, BGR>(leds, def->offset, def->count);
@@ -1182,6 +1325,9 @@ CLEDController& createController(LED_StripDefinition* def, CRGB* leds) {
                 case T_LPD1886:                 return FastLED.addLeds<LPD1886, C111_ESP_SINGLE_ENDED_6, BGR>(leds, def->offset, def->count);
                 default /*T_LPD1886_8BIT*/:     return FastLED.addLeds<LPD1886_8BIT, C111_ESP_SINGLE_ENDED_6, BGR>(leds, def->offset, def->count);
             }
+            #else
+            Serial.println("LED_FACTORY_BGR NOT DEFINED");
+            #endif
             
         }
     }
