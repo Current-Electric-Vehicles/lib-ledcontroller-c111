@@ -34,6 +34,7 @@ public:
 
     LED_MappedPixel* getMappedPixelAt(uint16_t x, uint16_t y);
     LED_MappedPixel* mapPixelAt(uint16_t x, uint16_t y, LED_Strip* strip, uint16_t pixelIndex);
+    LED_MappedPixel* removeMappedPixelAt(uint16_t x, uint16_t y);
     
     void setPixelAt(uint16_t x, uint16_t y, CRGB* pixel);
     void setPixelAt(uint16_t x, uint16_t y, CRGB pixel);

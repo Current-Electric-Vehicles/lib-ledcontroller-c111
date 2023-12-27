@@ -11,11 +11,12 @@
     },
     "build": {
         "flags": [
-            "-std=gnu++17"
+            "-std=gnu++17 -DASYNCWEBSERVER_REGEX"
         ],
         "unflags": [
             "-std=gnu++11"
-        ]
+        ],
+        "extraScript": "c11_extra.py"
     },
     "dependencies": {
         "FastLED": "*",

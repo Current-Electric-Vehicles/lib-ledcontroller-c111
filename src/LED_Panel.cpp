@@ -45,6 +45,17 @@ LED_MappedPixel* LED_Panel::mapPixelAt(uint16_t x, uint16_t y, LED_Strip* strip,
     return mp;
 }
 
+LED_MappedPixel* LED_Panel::removeMappedPixelAt(uint16_t x, uint16_t y) {
+    auto* mp = this->getMappedPixelAt(x, y);
+    if (mp == nullptr) {
+        return nullptr;
+    }
+    mp->stripId = INVALID_STRIP_ID;
+    mp->pixelIndex = UINT16_MAX;
+    mp->pixel = nullptr;
+    return mp;
+}
+
 void LED_Panel::setPixelAt(uint16_t x, uint16_t y, CRGB* pixel) {
     auto* mp = this->getMappedPixelAt(x, y);
     if (mp == nullptr) {

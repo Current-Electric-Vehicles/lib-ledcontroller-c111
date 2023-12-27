@@ -27,43 +27,43 @@ void LED_Manager::unload() {
 }
 
 bool LED_Manager::load(const String& jsonFile) {
-    size_t size = (this->strips.size() * 128);
-    for (auto& panel : this->panels) {
-        size += (panel.getWidth() * panel.getHeight() * 32);
-        size += 128;
-    }
+    Serial.print("Loading configuration from: ");  Serial.print(jsonFile);  Serial.println("");
 
-    DynamicJsonDocument configDoc(size);
+    DynamicJsonDocument configDoc(1024 * 10);
     File file = SPIFFS.open(jsonFile, FILE_READ);
     if (!file) {
+        Serial.print("Config file "); Serial.print(jsonFile); Serial.println(" not found!");
         return false;
     }
-
-    this->unload();
-            
     deserializeJson(configDoc, file);
     file.close();
 
+    Serial.println("Loading config doc:");
+    serializeJson(configDoc, Serial);
+    Serial.println("");
+
+    this->unload();
+
     // strips
-    auto strips = configDoc["strips"].as<JsonArray>();
-    for (int i = 0; i <strips.size(); i++) {
-        auto stripJson = strips[i];
+    for (int i = 0; i <configDoc["strips"].size(); i++) {
+        Serial.println("Loading a strip");
+        auto stripJson = configDoc["strips"][i];
 
         LED_StripDefinition def;
         def.name        = stripJson["name"].as<String>();
         def.pixelType   = stripJson["pixelType"];
         def.pin         = stripJson["pin"];
         def.rgbOrder    = stripJson["rgbOrder"];
-        def.offset      = stripJson["offset"];
-        def.count       = stripJson["count"];
+        def.offset      = stripJson["pixelOffset"];
+        def.count       = stripJson["pixelCount"];
 
         this->addStrip(def, stripJson["id"].as<uint8_t>());
     }
 
     // panels
-    auto panels = configDoc["panels"].as<JsonArray>();
-    for (int i = 0; i <panels.size(); i++) {
-        auto panelJson = panels[i];
+    for (int i = 0; i <configDoc["panels"].size(); i++) {
+        Serial.println("Loading a panel");
+        auto panelJson = configDoc["panels"][i];
 
         LED_PanelDefinition def;
         def.name        = panelJson["name"].as<String>();
@@ -89,6 +89,7 @@ bool LED_Manager::load(const String& jsonFile) {
 }
 
 bool LED_Manager::save(const String& jsonFile) {
+    Serial.print("Saving configuration to: ");  Serial.print(jsonFile);  Serial.println("");
     size_t size = (this->strips.size() * 128);
     for (auto& panel : this->panels) {
         size += (panel.getWidth() * panel.getHeight() * 32);
@@ -96,57 +97,57 @@ bool LED_Manager::save(const String& jsonFile) {
     }
 
     DynamicJsonDocument configDoc(size);
+    configDoc["version"] = 1;
 
     // strips
     for (int i = 0; i < this->strips.size(); i++) {
         auto& strip = this->strips[i];
         auto& def = strip.getDefinition();
+        Serial.print("Saving strip with id "); Serial.println(strip.getId());
 
-        DynamicJsonDocument subDoc(128);
-        subDoc["id"]          = strip.getId();
-        subDoc["name"]        = def.name;
-        subDoc["pixelType"]   = def.pixelType;
-        subDoc["pin"]         = def.pin;
-        subDoc["rgbOrder"]    = def.rgbOrder;
-        subDoc["offset"]      = def.offset;
-        subDoc["count"]       = def.count;
-
-        configDoc["strips"][i] = subDoc;
+        configDoc["strips"][i]["id"]          = strip.getId();
+        configDoc["strips"][i]["name"]        = def.name;
+        configDoc["strips"][i]["pixelType"]   = def.pixelType;
+        configDoc["strips"][i]["pin"]         = def.pin;
+        configDoc["strips"][i]["rgbOrder"]    = def.rgbOrder;
+        configDoc["strips"][i]["pixelOffset"] = def.offset;
+        configDoc["strips"][i]["pixelCount"]  = def.count;
     }
 
     // panels
     for (int i = 0; i < this->panels.size(); i++) {
         auto& panel = this->panels[i];
         auto& def = panel.getDefinition();
+        Serial.print("Saving panel with id "); Serial.println(panel.getId());
 
-        DynamicJsonDocument subDoc(128 + (panel.getWidth() * panel.getHeight() * 24));
-        subDoc["id"]          = panel.getId();
-        subDoc["name"]        = def.name;
-        subDoc["width"]       = panel.getWidth();
-        subDoc["height"]      = panel.getHeight();
+        configDoc["panels"][i]["id"]           = panel.getId();
+        configDoc["panels"][i]["name"]         = def.name;
+        configDoc["panels"][i]["width"]        = panel.getWidth();
+        configDoc["panels"][i]["height"]       = panel.getHeight();
 
         for (uint16_t x = 0; x < panel.getWidth(); x++) {
             for (uint16_t y = 0; y < panel.getHeight(); y++) {
                 auto* mappedPixel = panel.getMappedPixelAt(x, y);
                 if (mappedPixel == nullptr) {
-                    subDoc["pixels"][x][y] = nullptr;
+                    configDoc["panels"][i]["pixels"][x][y] = nullptr;
                 } else {
-                    subDoc["pixels"][x][y][0] = mappedPixel->stripId;
-                    subDoc["pixels"][x][y][1] = mappedPixel->pixelIndex;
+                    configDoc["panels"][i]["pixels"][x][y][0] = mappedPixel->stripId;
+                    configDoc["panels"][i]["pixels"][x][y][1] = mappedPixel->pixelIndex;
                 }
             }
         }
-
-        configDoc["panels"][i] = subDoc;
     }
 
     // save it
-    File file = SPIFFS.open(jsonFile, FILE_WRITE);
+    Serial.print("Saving config doc... ");
+    File file = SPIFFS.open(jsonFile, "w+");
     if (!file) {
+        Serial.print("Unable to open config file "); Serial.print(jsonFile); Serial.println(" for writing!");
         return false;
     }
     serializeJson(configDoc, file);
     file.close();
+    Serial.println("Saved!");
     return true;
 }
 
@@ -165,6 +166,18 @@ bool LED_Manager::removeStrip(uint8_t id) {
         auto& strip = this->strips[i];
         if (strip.getId() == id) {
             this->strips.erase(this->strips.begin() + i);
+
+            // remove any panel references
+            for (auto& panel : this->panels) {
+                for (uint16_t x = 0; x < panel.getWidth(); x++) {
+                    for (uint16_t y = 0; y < panel.getHeight(); y++) {
+                        if (panel.getMappedPixelAt(x, y)->stripId == id) {
+                            panel.removeMappedPixelAt(x, y);
+                        }
+                    }
+                }
+            }
+
             return true;
         }
     }
@@ -241,7 +254,7 @@ uint8_t LED_Manager::generateNextId() {
         }
     }
     uint8_t id = LED_Manager::idGenerator++;
-    while (id <= maxId) {
+    while (id <= maxId && id == 0) {
         id = LED_Manager::idGenerator++;
         if (id == UINT8_MAX) {
             id = 0;

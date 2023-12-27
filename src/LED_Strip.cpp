@@ -9,7 +9,7 @@ LED_Strip::LED_Strip(LED_StripDefinition& def):
     leds(0) {
 
     this->leds.resize(this->def.count, 0);
-    this->controller = &createController(&this->def, this->leds.data());
+    this->controller = createController(this->def.pin, this->def.rgbOrder, this->def.pixelType, this->def.offset, this->def.count, this->leds.data());
 }
 
 LED_Strip::~LED_Strip() {
