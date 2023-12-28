@@ -1,12 +1,14 @@
 
 #include "LED_Panel.h"
 
-LED_Panel::LED_Panel(LED_PanelDefinition& def):
-    id(UINT8_MAX),
-    def(def),
+LED_Panel::LED_Panel(LED_PanelConfig* conf):
+    id(conf->id),
+    name(conf->name),
+    width(conf->width),
+    height(conf->height),
     leds() {
 
-    this->leds.resize(def.width * def.height, {INVALID_PANEL_ID, UINT16_MAX, 0});
+    this->leds.resize(this->width * this->height, {INVALID_PANEL_ID, UINT16_MAX, 0});
     this->leds.shrink_to_fit();
 }
 
@@ -14,20 +16,8 @@ LED_Panel::~LED_Panel() {
 
 }
 
-LED_PanelDefinition& LED_Panel::getDefinition() {
-    return this->def;
-}
-
-uint8_t LED_Panel::getId() {
-    return this->id;
-}
-
-void LED_Panel::setId(uint8_t id) {
-    this->id = id;
-}
-
 LED_MappedPixel* LED_Panel::getMappedPixelAt(uint16_t x, uint16_t y) {
-    uint16_t index = (y * this->def.width) + x;
+    uint16_t index = (y * this->width) + x;
     if (index >= this->leds.size()) {
         return nullptr;
     }
@@ -94,25 +84,37 @@ bool LED_Panel::setNonEmptyPixelAt(uint16_t x, uint16_t y, CRGB pixel) {
     return true;
 }
 
+uint8_t LED_Panel::getId() {
+    return this->id;
+}
+
+const String& LED_Panel::getName() {
+    return this->name;
+}
+
 uint16_t LED_Panel::getWidth() {
-    return this->def.width;
+    return this->width;
 }
 
 uint16_t LED_Panel::getHeight() {
-    return this->def.height;
+    return this->height;
+}
+
+std::vector<LED_MappedPixel>& LED_Panel::getLeds() {
+    return this->leds;
 }
 
 void LED_Panel::dumpDebug() {
-    Serial.print("Panel size: ");  Serial.print(this->def.width);  Serial.print("x");  Serial.println(this->def.height);
+    Serial.print("Panel size: ");  Serial.print(this->width);  Serial.print("x");  Serial.println(this->height);
     Serial.print("+");
-    for (uint16_t x = 0; x < this->def.width; x++) {
+    for (uint16_t x = 0; x < this->width; x++) {
         Serial.print("-");
     }
     Serial.println("+");
 
-    for (uint16_t y = 0; y < this->def.height; y++) {
+    for (uint16_t y = 0; y < this->height; y++) {
         Serial.print("|");
-        for (uint16_t x = 0; x < this->def.width; x++) {
+        for (uint16_t x = 0; x < this->width; x++) {
             if (this->getMappedPixelAt(x, y)->stripId == INVALID_STRIP_ID) {
                 Serial.print(" ");
             } else {
@@ -123,7 +125,7 @@ void LED_Panel::dumpDebug() {
     }
 
     Serial.print("+");
-    for (uint16_t x = 0; x < this->def.width; x++) {
+    for (uint16_t x = 0; x < this->width; x++) {
         Serial.print("-");
     }
     Serial.println("+");

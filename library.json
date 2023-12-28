@@ -11,7 +11,7 @@
     },
     "build": {
         "flags": [
-            "-std=gnu++17 -DASYNCWEBSERVER_REGEX"
+            "-std=gnu++17"
         ],
         "unflags": [
             "-std=gnu++11"

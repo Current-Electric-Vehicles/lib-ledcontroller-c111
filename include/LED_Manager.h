@@ -12,6 +12,10 @@
 
 #define LED_CONFIG_FILE "/conf/led.json"
 
+#ifndef LED_MANAGER_JSON_BUFFER_SIZE
+#define LED_MANAGER_JSON_BUFFER_SIZE 5120
+#endif
+
 class LED_Manager {
 public:
     LED_Manager();
@@ -21,12 +25,12 @@ public:
     bool load(const String& jsonFile = LED_CONFIG_FILE);
     bool save(const String& jsonFile = LED_CONFIG_FILE);
 
-    LED_Strip* addStrip(LED_StripDefinition& definition, uint8_t id = 0);
+    LED_Strip* addStrip(LED_StripConfig* conf);
     bool removeStrip(uint8_t id);
     LED_Strip* getStripById(uint8_t id);
     LED_Strip* getStripByName(String& name);
 
-    LED_Panel* addPanel(LED_PanelDefinition& definition, uint8_t id = 0);
+    LED_Panel* addPanel(LED_PanelConfig* conf);
     bool removePanel(uint8_t id);
     LED_Panel* getPanelById(uint8_t id);
     LED_Panel* getPanelByName(String& name);

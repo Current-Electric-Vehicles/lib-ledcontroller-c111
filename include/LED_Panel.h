@@ -10,7 +10,8 @@
 
 #define INVALID_PANEL_ID ((uint8_t)UINT8_MAX)
 
-struct LED_PanelDefinition {
+struct LED_PanelConfig {
+    uint8_t id = 0;
     String name;
     uint16_t width;
     uint16_t height;
@@ -25,12 +26,8 @@ struct LED_MappedPixel {
 class LED_Panel {
 public:
 
-    LED_Panel(LED_PanelDefinition& def);
+    LED_Panel(LED_PanelConfig* conf);
     ~LED_Panel();
-
-    LED_PanelDefinition& getDefinition();
-    uint8_t getId();
-    void setId(uint8_t id);
 
     LED_MappedPixel* getMappedPixelAt(uint16_t x, uint16_t y);
     LED_MappedPixel* mapPixelAt(uint16_t x, uint16_t y, LED_Strip* strip, uint16_t pixelIndex);
@@ -41,14 +38,19 @@ public:
     bool setNonEmptyPixelAt(uint16_t x, uint16_t y, CRGB* pixel);
     bool setNonEmptyPixelAt(uint16_t x, uint16_t y, CRGB pixel);
     
+    uint8_t getId();
+    const String& getName();
     uint16_t getWidth();
     uint16_t getHeight();
+    std::vector<LED_MappedPixel>& getLeds();
 
     void dumpDebug();
     
 private:
     uint8_t id;
-    LED_PanelDefinition def;
+    String name;
+    uint16_t width;
+    uint16_t height;
     std::vector<LED_MappedPixel> leds;
 };
 
