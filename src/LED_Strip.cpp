@@ -55,3 +55,7 @@ CRGB* LED_Strip::getLeds() {
 CRGB* LED_Strip::getPixelAt(uint16_t index) {
     return &this->leds[index];
 }
+
+CLEDController* LED_Strip::getController() {
+    return this->controller;
+}

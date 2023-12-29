@@ -32,6 +32,7 @@ public:
     uint16_t getCount();
     CRGB* getLeds();
     CRGB* getPixelAt(uint16_t index);
+    CLEDController* getController();
 
 private:
     uint8_t id;
