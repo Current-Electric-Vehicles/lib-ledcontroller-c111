@@ -88,7 +88,7 @@ void C111::setOverheatTempCelcius(float temp) {
 }
 
 bool C111::isOverHeated() {
-    return this->getTemperatureCelcius() >= C111_OVERHEATED_TEMP_CELCIUS;
+    return this->getTemperatureCelcius() >= this->overheatTempCelcius;
 }
 
 void C111::enablePSU1(bool enabled) {
