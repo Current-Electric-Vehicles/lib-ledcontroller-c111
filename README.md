@@ -13,7 +13,7 @@ Use the controller in your code:
 
 ```cpp
 
-#include <LEDController.h>
+#include <LED_Controller.h>
 
 LEDController controller;
 

@@ -1,5 +1,5 @@
 
-#ifndef C111_ESP_PINOUT
+#ifndef C111_ESP_C111_ESP_PINOUT
 #define C111_ESP_C111_ESP_PINOUT
 
 #include <Arduino.h>

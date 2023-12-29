@@ -15,13 +15,9 @@
         ],
         "unflags": [
             "-std=gnu++11"
-        ],
-        "extraScript": "c11_extra.py"
+        ]
     },
     "dependencies": {
-        "FastLED": "*",
-        "ArduinoJson": "bblanchon/ArduinoJson@6.21.4",
-        "Adafruit-GFX-Library": "adafruit/Adafruit GFX Library@1.11.9",
         "Arduino-TMP1075": "https://github.com/PatrickBaus/Arduino-TMP1075",
         "arduino-CAN": "https://github.com/sandeepmistry/arduino-CAN"
     }
