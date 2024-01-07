@@ -43,8 +43,8 @@
 #define C111_ESP_USER_INPUT_2                           GPIO_NUM_17
 #define C111_ESP_CAN_TX                                 GPIO_NUM_5
 #define C111_ESP_USER_INPUT_4                           GPIO_NUM_18
-#define C111_ESP_DIFF_1_OR_SINGLE_ENDED_1               GPIO_NUM_19
-#define C111_ESP_DIFF_2_OR_SINGLE_ENDED_2               GPIO_NUM_21
+#define C111_ESP_DIFF_1_OR_SINGLE_ENDED_1               GPIO_NUM_21
+#define C111_ESP_DIFF_2_OR_SINGLE_ENDED_2               GPIO_NUM_19
 #define C111_ESP_UART_RX                                GPIO_NUM_3
 #define C111_ESP_UART_TX                                GPIO_NUM_1
 #define C111_ESP_SINGLE_ENDED_5                         GPIO_NUM_22

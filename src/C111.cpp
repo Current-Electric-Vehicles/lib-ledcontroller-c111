@@ -59,7 +59,7 @@ void C111::setDifferentialDataEnabled(bool enabled) {
 }
 
 bool C111::isDifferentialDataEnabled() {
-    return digitalRead(C111_ESP_DIFF_OR_SE_SWITCH) == HIGH;
+    return digitalRead(C111_ESP_DIFF_OR_SE_SWITCH) == LOW;
 }
 
 float C111::getTemperatureCelcius() {
@@ -91,7 +91,7 @@ bool C111::isOverHeated() {
     return this->getTemperatureCelcius() >= this->overheatTempCelcius;
 }
 
-void C111::enablePSU1(bool enabled) {
+void C111::setPSU1Enabled(bool enabled) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE, enabled ? HIGH : LOW);
 }
 
@@ -99,7 +99,7 @@ bool C111::isPSU1Enabled() {
     return digitalRead(C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE) == HIGH;
 }
 
-void C111::enablePSU2(bool enabled) {
+void C111::setPSU2Enabled(bool enabled) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_CHANNEL_2_ENABLE, enabled ? HIGH : LOW);
 }
 

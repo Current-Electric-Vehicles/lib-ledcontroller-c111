@@ -27,10 +27,10 @@ public:
     void setOverheatTempCelcius(float temp);
     bool isOverHeated();
 
-    void enablePSU1(bool enabled);
+    void setPSU1Enabled(bool enabled);
     bool isPSU1Enabled();
 
-    void enablePSU2(bool enabled);
+    void setPSU2Enabled(bool enabled);
     bool isPSU2Enabled();
 
     uint8_t getUserInputState(uint8_t input);
