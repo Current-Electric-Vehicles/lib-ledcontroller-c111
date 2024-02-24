@@ -6,6 +6,8 @@
 
 #include <Wire.h>
 #include <TMP1075.h>
+#include <MCP23008.h>
+#include <array>
 
 class C111 {
 public:
@@ -13,7 +15,11 @@ public:
     C111();
     ~C111();
 
-    void initialize();
+    bool initialize();
+
+    void setPowerSupplyKeepAliveEnabled(bool enabled);
+    bool isPowerSupplyKeepAliveEnabled();
+    float getPowerSupplyVoltage();
 
     void setCanTerminated(bool terminated);
     bool isCanTerminated();
@@ -21,24 +27,28 @@ public:
     void setDifferentialDataEnabled(bool enabled);
     bool isDifferentialDataEnabled();
 
-    float getPSUCurrent(uint8_t sensor);
-
     float getTemperatureCelcius();
     void setOverheatTempCelcius(float temp);
     bool isOverHeated();
 
+    float getPSU1Current();
+    float getPSU1TemperatureCelcius();
     void setPSU1Enabled(bool enabled);
     bool isPSU1Enabled();
 
+    float getPSU2Current();
+    float getPSU2TemperatureCelcius();
     void setPSU2Enabled(bool enabled);
     bool isPSU2Enabled();
 
     uint8_t getUserInputState(uint8_t input);
-    void attachInputInterrupt(uint8_t input, uint8_t mode, void (*userFunc)(void));
+
+    std::array<uint8_t, 8> getUserInputState();
 
 private:
     TwoWire wire;
     TMP1075::TMP1075 tempSensor;
+    MCP23008 ioExpander;
     bool initialized;
     float overheatTempCelcius;
 };
