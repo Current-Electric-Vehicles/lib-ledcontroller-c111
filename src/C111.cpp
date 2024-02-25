@@ -1,6 +1,32 @@
 
 #include "C111.h"
 
+static float convertADCToTemperature(int adcValue) {
+
+    float resistance    = 1000.0f;
+    float voltage       = (float)adcValue * (3.3f / 4096.0f);
+    float amps          = voltage / resistance;
+    float milliAmps     = amps * 1000.0f;
+
+    // milliAmps = ISNST
+    return ((milliAmps - 0.85) / 0.011) + 25.0f;
+}
+
+static float convertADCToCurrent(int adcValue) {
+    float resistance    = 1000.0f;
+    float voltage       = (float)adcValue * (3.3f / 4096.0f);
+    float amps          = voltage / resistance;
+    float milliAmps     = amps * 1000.0f;
+
+    // milliAmps = ISNSI
+    return milliAmps * 2000.0f;
+}
+
+inline int readADCValue(int adcPin) {
+    analogReadResolution(12);
+    return analogRead(adcPin);
+}
+
 C111::C111():
     wire(0),
     tempSensor(wire, C111_TEMP_SENSOR_I2C_ADDRESS),
@@ -34,6 +60,7 @@ bool C111::initialize() {
     // analog
     pinMode(C111_ESP_LINE_LEVEL_AUDIO_INPUT, ANALOG);
     pinMode(C111_ESP_12V_VOLTAGE_MONITOR, ANALOG);
+    pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR, ANALOG);
     
     // highside switch monitor selection
     pinMode(C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE, OUTPUT);
@@ -73,8 +100,7 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 }
 
 float C111::getPowerSupplyVoltage() {
-    analogReadResolution(12);
-    float counts = (float)analogRead(C111_ESP_12V_VOLTAGE_MONITOR);
+    float counts = (float)readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
     return 1.0f + (((counts * 0.98) * C111_ADC_RESOLUTION) * 9.708);
 }
 
@@ -102,25 +128,22 @@ float C111::getTemperatureCelcius() {
 float C111::getPSU1Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    analogReadResolution(12);
-    float counts = (float)analogRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return (0.0f + (((counts * 1.0f) * C111_ADC_RESOLUTION) * 2.0f)) * 2.0f;
+    int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToCurrent(adcValue);
 }
 
 float C111::getPSU1TemperatureCelcius() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    analogReadResolution(12);
-    float counts = (float)analogRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return ((((counts * 1.0f) * C111_ADC_RESOLUTION) - 0.85) / 0.011) + 25.0f;
+    int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToTemperature(adcValue);
 }
 
 float C111::getPSU2Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
-    analogReadResolution(12);
-    float counts = (float)analogRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return (0.0f + (((counts * 1.0f) * C111_ADC_RESOLUTION) * 2.0f)) * 2.0f;
+    int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToCurrent(adcValue);
 }
 
 float C111::getPSU2TemperatureCelcius() {
