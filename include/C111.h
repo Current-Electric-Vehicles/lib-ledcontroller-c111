@@ -45,6 +45,8 @@ public:
 
     std::array<uint8_t, 8> getUserInputState();
 
+    uint16_t readLineLevelAudio();
+
 private:
     TwoWire wire;
     TMP1075::TMP1075 tempSensor;

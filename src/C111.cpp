@@ -1,6 +1,8 @@
 
 #include "C111.h"
 
+#include <driver/adc.h>
+
 static float convertADCToTemperature(int adcValue) {
 
     float resistance    = 1000.0f;
@@ -16,13 +18,14 @@ static float convertADCToCurrent(int adcValue) {
     float resistance    = 1000.0f;
     float voltage       = (float)adcValue * (3.3f / 4096.0f);
     float amps          = voltage / resistance;
-    float milliAmps     = amps * 1000.0f;
+    // float milliAmps     = amps * 1000.0f;
 
     // milliAmps = ISNSI
-    return milliAmps * 2000.0f;
+    return amps * 2000.0f;
 }
 
 inline int readADCValue(int adcPin) {
+    adcAttachPin(adcPin);
     analogReadResolution(12);
     return analogRead(adcPin);
 }
@@ -53,9 +56,12 @@ bool C111::initialize() {
         return false;
     }
 
+    adc1_config_width(ADC_WIDTH_BIT_12);
+    adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_11);
+
     // inputs
-    ioExpander.pinMode8(INPUT);
-    ioExpander.setPullup8(false);
+    ioExpander.pinMode8(0xFF);
+    ioExpander.setPullup8(0x00);
 
     // analog
     pinMode(C111_ESP_LINE_LEVEL_AUDIO_INPUT, ANALOG);
@@ -128,6 +134,7 @@ float C111::getTemperatureCelcius() {
 float C111::getPSU1Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
+    delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
     return convertADCToCurrent(adcValue);
 }
@@ -135,6 +142,7 @@ float C111::getPSU1Current() {
 float C111::getPSU1TemperatureCelcius() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
+    delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
     return convertADCToTemperature(adcValue);
 }
@@ -142,6 +150,7 @@ float C111::getPSU1TemperatureCelcius() {
 float C111::getPSU2Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
+    delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
     return convertADCToCurrent(adcValue);
 }
@@ -200,4 +209,8 @@ std::array<uint8_t, 8> C111::getUserInputState() {
         (uint8_t)(value & (1 << C111_IO_EXPANDER_INPUT_7) ? HIGH : LOW),
         (uint8_t)(value & (1 << C111_IO_EXPANDER_INPUT_8) ? HIGH : LOW),
     };
+}
+
+uint16_t C111::readLineLevelAudio() {
+    return adc1_get_raw(ADC1_CHANNEL_6);
 }
