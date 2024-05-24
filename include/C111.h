@@ -43,6 +43,9 @@ public:
 
     uint8_t getUserInputState(uint8_t input);
 
+    float getPsuScaleFactor();
+    void setPsuScaleFactor(float psuScaleFactor);
+
     std::array<uint8_t, 8> getUserInputState();
 
     uint16_t readLineLevelAudio();
@@ -53,6 +56,7 @@ private:
     MCP23008 ioExpander;
     bool initialized;
     float overheatTempCelcius;
+    float psuScaleFactor;
 };
 
 #endif

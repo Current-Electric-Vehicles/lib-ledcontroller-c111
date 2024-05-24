@@ -14,14 +14,14 @@ static float convertADCToTemperature(int adcValue) {
     return ((milliAmps - 0.85) / 0.011) + 25.0f;
 }
 
-static float convertADCToCurrent(int adcValue) {
+static float convertADCToCurrent(int adcValue, float scaleFactor) {
     float resistance    = 1000.0f;
     float voltage       = (float)adcValue * (3.3f / 4096.0f);
     float amps          = voltage / resistance;
     // float milliAmps     = amps * 1000.0f;
 
     // milliAmps = ISNSI
-    return amps * 2000.0f;
+    return amps * scaleFactor;
 }
 
 inline int readADCValue(int adcPin) {
@@ -136,7 +136,7 @@ float C111::getPSU1Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
     delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return convertADCToCurrent(adcValue);
+    return convertADCToCurrent(adcValue, this->psuScaleFactor);
 }
 
 float C111::getPSU1TemperatureCelcius() {
@@ -152,7 +152,7 @@ float C111::getPSU2Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
     delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return convertADCToCurrent(adcValue);
+    return convertADCToCurrent(adcValu, this->psuScaleFactor);
 }
 
 float C111::getPSU2TemperatureCelcius() {
@@ -213,4 +213,12 @@ std::array<uint8_t, 8> C111::getUserInputState() {
 
 uint16_t C111::readLineLevelAudio() {
     return adc1_get_raw(ADC1_CHANNEL_6);
+}
+
+float C111::getPsuScaleFactor() {
+    return this->psuScaleFactor;
+}
+
+void C111::setPsuScaleFactor(float psuScaleFactor) {
+    this->psuScaleFactor = psuScaleFactor;
 }
