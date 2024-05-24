@@ -152,7 +152,7 @@ float C111::getPSU2Current() {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
     delayMicroseconds(60);
     int adcValue = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-    return convertADCToCurrent(adcValu, this->psuScaleFactor);
+    return convertADCToCurrent(adcValue, this->psuScaleFactor);
 }
 
 float C111::getPSU2TemperatureCelcius() {
