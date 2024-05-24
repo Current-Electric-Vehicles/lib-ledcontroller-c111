@@ -227,7 +227,9 @@ void C111::readADCValues() {
     delayMicroseconds(60);
     this->lastPsu2CurrentReading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
 
+    delayMicroseconds(60);
     this->lastPowerSupplyReading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
 
+    delayMicroseconds(60);
     this->lastLineLevelAudioReading = adc1_get_raw(ADC1_CHANNEL_6);
 }
