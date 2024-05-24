@@ -50,6 +50,8 @@ public:
 
     uint16_t readLineLevelAudio();
 
+    void readADCValues();
+
 private:
     TwoWire wire;
     TMP1075::TMP1075 tempSensor;
@@ -57,6 +59,11 @@ private:
     bool initialized;
     float overheatTempCelcius;
     float psuScaleFactor;
+    int lastPsu1CurrentReading;
+    int lastPsu1TempReading;
+    int lastPsu2CurrentReading;
+    int lastPowerSupplyReading;
+    int lastLineLevelAudioReading;
 };
 
 #endif
