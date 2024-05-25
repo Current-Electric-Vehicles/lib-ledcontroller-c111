@@ -210,7 +210,11 @@ void C111::setPsuScaleFactor(float psuScaleFactor) {
     this->psuScaleFactor = psuScaleFactor;
 }
 
-void C111::readADCValues() {
+void C111::takeAudioADCReading() {
+    this->lastLineLevelAudioReading = adc1_get_raw(ADC1_CHANNEL_6);
+}
+
+void C111::takeSensorADCReadings() {
 
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
@@ -229,7 +233,4 @@ void C111::readADCValues() {
 
     delayMicroseconds(60);
     this->lastPowerSupplyReading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
-
-    delayMicroseconds(60);
-    this->lastLineLevelAudioReading = adc1_get_raw(ADC1_CHANNEL_6);
 }

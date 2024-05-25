@@ -50,7 +50,8 @@ public:
 
     uint16_t readLineLevelAudio();
 
-    void readADCValues();
+    void takeAudioADCReading();
+    void takeSensorADCReadings();
 
 private:
     TwoWire wire;
