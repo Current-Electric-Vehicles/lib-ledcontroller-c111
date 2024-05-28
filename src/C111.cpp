@@ -106,7 +106,8 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 }
 
 float C111::getPowerSupplyVoltage() {
-    return 1.0f + ((((float)this->lastPowerSupplyReading * 0.98) * C111_ADC_RESOLUTION) * 9.708);
+    int reading = adc1_get_raw(ADC1_CHANNEL_6);
+    return 1.0f + ((((float)reading * 0.98) * C111_ADC_RESOLUTION) * 9.708);
 }
 
 void C111::setCanTerminated(bool terminated) {
@@ -131,15 +132,24 @@ float C111::getTemperatureCelcius() {
 }
 
 float C111::getPSU1Current() {
-    return convertADCToCurrent(this->lastPsu1CurrentReading, this->psuScaleFactor);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
+    auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToCurrent(reading, this->psuScaleFactor);
 }
 
 float C111::getPSU1TemperatureCelcius() {
-    return convertADCToTemperature(this->lastPsu1TempReading);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
+    auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToTemperature(reading);
 }
 
 float C111::getPSU2Current() {
-    return convertADCToCurrent(this->lastPsu2CurrentReading, this->psuScaleFactor);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
+    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
+    auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+    return convertADCToCurrent(reading, this->psuScaleFactor);
 }
 
 float C111::getPSU2TemperatureCelcius() {
@@ -198,8 +208,8 @@ std::array<uint8_t, 8> C111::getUserInputState() {
     };
 }
 
-uint16_t C111::readLineLevelAudio() {
-    return this->lastLineLevelAudioReading;
+uint16_t C111::getLineLevelAudio() {
+    return adc1_get_raw(ADC1_CHANNEL_6);
 }
 
 float C111::getPsuScaleFactor() {
@@ -208,29 +218,4 @@ float C111::getPsuScaleFactor() {
 
 void C111::setPsuScaleFactor(float psuScaleFactor) {
     this->psuScaleFactor = psuScaleFactor;
-}
-
-void C111::takeAudioADCReading() {
-    this->lastLineLevelAudioReading = adc1_get_raw(ADC1_CHANNEL_6);
-}
-
-void C111::takeSensorADCReadings() {
-
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    delayMicroseconds(60);
-    this->lastPsu1CurrentReading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    delayMicroseconds(60);
-    this->lastPsu1TempReading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
-    digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
-    delayMicroseconds(60);
-    this->lastPsu2CurrentReading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-
-    delayMicroseconds(60);
-    this->lastPowerSupplyReading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
 }

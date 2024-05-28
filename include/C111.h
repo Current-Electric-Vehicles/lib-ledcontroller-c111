@@ -48,10 +48,7 @@ public:
 
     std::array<uint8_t, 8> getUserInputState();
 
-    uint16_t readLineLevelAudio();
-
-    void takeAudioADCReading();
-    void takeSensorADCReadings();
+    uint16_t getLineLevelAudio();
 
 private:
     TwoWire wire;
@@ -60,11 +57,6 @@ private:
     bool initialized;
     float overheatTempCelcius;
     float psuScaleFactor;
-    int lastPsu1CurrentReading;
-    int lastPsu1TempReading;
-    int lastPsu2CurrentReading;
-    int lastPowerSupplyReading;
-    int lastLineLevelAudioReading;
 };
 
 #endif
