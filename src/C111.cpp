@@ -15,18 +15,23 @@ static float convertADCToTemperature(int adcValue) {
 }
 
 static float convertADCToCurrent(int adcValue, float scaleFactor) {
-  float resistance = 1000.0f;
-  float voltage = (float) adcValue * (3.3f / 4096.0f);
-  float amps = voltage / resistance;
+  //float resistance = 1000.0f;
+  //float voltage = (float) adcValue * (3.3f / 4096.0f);
+  //float amps = voltage / resistance;
   // float milliAmps     = amps * 1000.0f;
 
   // milliAmps = ISNSI
-  return amps * scaleFactor;
+  //return amps * scaleFactor;
+  //return amps * 2980.0f;
+
+  int offset = -169;
+  float scale = 0.0016722;  //0.00167224080267559
+  //float amps = ((adcValue - offset) * scale);
+  return ((adcValue - offset) * scale);
 }
 
 inline int readADCValue(int adcPin) {
   adcAttachPin(adcPin);
-  analogReadResolution(12);
   return analogRead(adcPin);
 }
 
@@ -44,6 +49,8 @@ C111::~C111() {
 }
 
 bool C111::initialize() {
+
+  analogReadResolution(12); //pulled out of analog read.  only needs to get called once.
 
   wire.setPins(C111_ESP_I2C_SDA, C111_ESP_I2C_SCL);
   if (!wire.begin(C111_ESP_I2C_SDA, C111_ESP_I2C_SCL)) {
@@ -106,8 +113,10 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 }
 
 float C111::getPowerSupplyVoltage() {
-  int reading = adc1_get_raw(ADC1_CHANNEL_6);
-  return 1.0f + ((((float) reading * 0.98) * C111_ADC_RESOLUTION) * 9.708);
+  int reading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
+  int offset = -196;
+  float scale = 0.007843; //0.00784313725490196
+  return ((reading - offset) * scale);
 }
 
 void C111::setCanTerminated(bool terminated) {
