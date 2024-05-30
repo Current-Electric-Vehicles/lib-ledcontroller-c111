@@ -46,6 +46,9 @@ public:
     float getPsuScaleFactor();
     void setPsuScaleFactor(float psuScaleFactor);
 
+    float getPowerSupplyScaleFactor();
+    void setPowerSupplyScaleFactor(float powerSupplyScaleFactor);
+
     std::array<uint8_t, 8> getUserInputState();
 
     uint16_t getLineLevelAudio();
@@ -57,6 +60,7 @@ private:
     bool initialized;
     float overheatTempCelcius;
     float psuScaleFactor;
+    float powerSupplyScaleFactor;
 };
 
 #endif

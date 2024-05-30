@@ -15,19 +15,8 @@ static float convertADCToTemperature(int adcValue) {
 }
 
 static float convertADCToCurrent(int adcValue, float scaleFactor) {
-  //float resistance = 1000.0f;
-  //float voltage = (float) adcValue * (3.3f / 4096.0f);
-  //float amps = voltage / resistance;
-  // float milliAmps     = amps * 1000.0f;
-
-  // milliAmps = ISNSI
-  //return amps * scaleFactor;
-  //return amps * 2980.0f;
-
-  int offset = -169;
-  float scale = 0.0016722;  //0.00167224080267559
-  //float amps = ((adcValue - offset) * scale);
-  return ((adcValue - offset) * scale);
+  const int offset = -169;
+  return ((adcValue - offset) * scaleFactor);
 }
 
 inline int readADCValue(int adcPin) {
@@ -49,8 +38,6 @@ C111::~C111() {
 }
 
 bool C111::initialize() {
-
-  analogReadResolution(12); //pulled out of analog read.  only needs to get called once.
 
   wire.setPins(C111_ESP_I2C_SDA, C111_ESP_I2C_SCL);
   if (!wire.begin(C111_ESP_I2C_SDA, C111_ESP_I2C_SCL)) {
@@ -96,7 +83,11 @@ bool C111::initialize() {
   pinMode(C111_ESP_DATA_5, OUTPUT);
   pinMode(C111_ESP_DATA_6, OUTPUT);
 
+  analogReadResolution(12);
+
   // set defaults
+  this->setPowerSupplyScaleFactor(0.007843);
+  this->setPsuScaleFactor(0.0016722);
   this->setCanTerminated(false);
   this->setOverheatTempCelcius(C111_OVERHEATED_TEMP_CELCIUS);
   this->setPowerSupplyKeepAliveEnabled(true);
@@ -115,8 +106,7 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 float C111::getPowerSupplyVoltage() {
   int reading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
   int offset = -196;
-  float scale = 0.007843; //0.00784313725490196
-  return ((reading - offset) * scale);
+  return ((reading - offset) * this->powerSupplyScaleFactor);
 }
 
 void C111::setCanTerminated(bool terminated) {
@@ -248,4 +238,12 @@ float C111::getPsuScaleFactor() {
 
 void C111::setPsuScaleFactor(float psuScaleFactor) {
   this->psuScaleFactor = psuScaleFactor;
+}
+
+float C111::getPowerSupplyScaleFactor() {
+  return this->powerSupplyScaleFactor;
+}
+
+void C111::setPowerSupplyScaleFactor(float powerSupplyScaleFactor) {
+  this->powerSupplyScaleFactor = powerSupplyScaleFactor;
 }
