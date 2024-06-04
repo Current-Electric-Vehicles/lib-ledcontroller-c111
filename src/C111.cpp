@@ -14,8 +14,7 @@ static float convertADCToTemperature(int adcValue) {
   return ((milliAmps - 0.85) / 0.011) + 25.0f;
 }
 
-static float convertADCToCurrent(int adcValue, float scaleFactor) {
-  const int offset = -169;
+static float convertADCToCurrent(int adcValue, float scaleFactor, float offset) {
   return ((adcValue - offset) * scaleFactor);
 }
 
@@ -87,7 +86,9 @@ bool C111::initialize() {
 
   // set defaults
   this->setPowerSupplyScaleFactor(0.007843);
+  this->setPowerSupplyOffset(-169);
   this->setPsuScaleFactor(0.0016722);
+  this->setPsuOffset(-169);
   this->setCanTerminated(false);
   this->setOverheatTempCelcius(C111_OVERHEATED_TEMP_CELCIUS);
   this->setPowerSupplyKeepAliveEnabled(true);
@@ -105,8 +106,7 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 
 float C111::getPowerSupplyVoltage() {
   int reading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
-  int offset = -196;
-  return ((reading - offset) * this->powerSupplyScaleFactor);
+  return ((reading - this->powerSupplyOffset) * this->powerSupplyScaleFactor);
 }
 
 void C111::setCanTerminated(bool terminated) {
@@ -138,7 +138,7 @@ float C111::getPSU1Current() {
     delayMicroseconds(20);
   }
   auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-  return convertADCToCurrent(reading, this->psuScaleFactor);
+  return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
 float C111::getPSU1TemperatureCelcius() {
@@ -160,7 +160,7 @@ float C111::getPSU2Current() {
     delayMicroseconds(20);
   }
   auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
-  return convertADCToCurrent(reading, this->psuScaleFactor);
+  return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
 float C111::getPSU2TemperatureCelcius() {
@@ -240,10 +240,26 @@ void C111::setPsuScaleFactor(float psuScaleFactor) {
   this->psuScaleFactor = psuScaleFactor;
 }
 
+float C111::getPsuOffset() {
+  return this->psuOffset;
+}
+
+void C111::setPsuOffset(float psuOffset) {
+  this->psuOffset = psuOffset;
+}
+
 float C111::getPowerSupplyScaleFactor() {
   return this->powerSupplyScaleFactor;
 }
 
 void C111::setPowerSupplyScaleFactor(float powerSupplyScaleFactor) {
   this->powerSupplyScaleFactor = powerSupplyScaleFactor;
+}
+
+float C111::getPowerSupplyOffset() {
+  return this->powerSupplyOffset;
+}
+
+void C111::setPowerSupplyOffset(float powerSupplyOffset) {
+  this->powerSupplyOffset = powerSupplyOffset;
 }

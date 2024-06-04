@@ -46,8 +46,14 @@ public:
     float getPsuScaleFactor();
     void setPsuScaleFactor(float psuScaleFactor);
 
+    float getPsuOffset();
+    void setPsuOffset(float psuOffset);
+
     float getPowerSupplyScaleFactor();
     void setPowerSupplyScaleFactor(float powerSupplyScaleFactor);
+
+    float getPowerSupplyOffset();
+    void setPowerSupplyOffset(float powerSupplyOffset);
 
     std::array<uint8_t, 8> getUserInputState();
 
@@ -59,7 +65,9 @@ private:
     MCP23008 ioExpander;
     bool initialized;
     float overheatTempCelcius;
+    float psuOffset;
     float psuScaleFactor;
+    float powerSupplyOffset;
     float powerSupplyScaleFactor;
 };
 
