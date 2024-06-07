@@ -49,7 +49,7 @@
 #define C111_ESP_DIFF_OR_SE_SWITCH                      GPIO_NUM_2
 #define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2    GPIO_NUM_0
 #define C111_ESP_CAN_RX                                 GPIO_NUM_4
-#define C111_ESP_EXPANSION_HEADER_IO1                   GPIO_NUM_16
+#define C111_ESP_HIGHSIDESWITCH_FAULT_LATCH             GPIO_NUM_16
 #define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1    GPIO_NUM_17
 #define C111_ESP_CAN_TX                                 GPIO_NUM_5
 #define C111_ESP_POWER_SUPPLY_KEEP_ALIVE                GPIO_NUM_18

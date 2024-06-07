@@ -66,6 +66,8 @@ bool C111::initialize() {
   pinMode(C111_ESP_HIGHSIDESWITCH_CHANNEL_2_ENABLE, OUTPUT);
   pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, OUTPUT);
   pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, OUTPUT);
+  pinMode(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, OUTPUT);
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
 
   // power supply
   pinMode(C111_ESP_POWER_SUPPLY_KEEP_ALIVE, OUTPUT);
@@ -86,7 +88,7 @@ bool C111::initialize() {
 
   // set defaults
   this->setPowerSupplyScaleFactor(0.007843);
-  this->setPowerSupplyOffset(-169);
+  this->setPowerSupplyOffset(-196);
   this->setPsuScaleFactor(0.0016722);
   this->setPsuOffset(-169);
   this->setCanTerminated(false);
@@ -262,4 +264,11 @@ float C111::getPowerSupplyOffset() {
 
 void C111::setPowerSupplyOffset(float powerSupplyOffset) {
   this->powerSupplyOffset = powerSupplyOffset;
+}
+
+void C111::resetFaultLatch() {
+  //To reset a latched fault, pull the line low, wait, then pull it high again.
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, LOW);
+  delayMicroseconds(20);
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
 }
