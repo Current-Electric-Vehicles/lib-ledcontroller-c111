@@ -69,6 +69,10 @@ bool C111::initialize() {
   pinMode(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, OUTPUT);
   digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
 
+  // highside fault latch
+  pinMode(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, OUTPUT);
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
+
   // power supply
   pinMode(C111_ESP_POWER_SUPPLY_KEEP_ALIVE, OUTPUT);
 
@@ -96,6 +100,12 @@ bool C111::initialize() {
   this->setPowerSupplyKeepAliveEnabled(true);
 
   return true;
+}
+
+void C111::resetFaultLatch() {
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, LOW);
+  delayMicroseconds(50);
+  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
 }
 
 void C111::setPowerSupplyKeepAliveEnabled(bool enabled) {

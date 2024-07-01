@@ -31,6 +31,8 @@ public:
     void setOverheatTempCelcius(float temp);
     bool isOverHeated();
 
+    void resetFaultLatch();
+
     float getPSU1Current();
     float getPSU1TemperatureCelcius();
     void setPSU1Enabled(bool enabled);
