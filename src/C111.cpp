@@ -275,10 +275,3 @@ float C111::getPowerSupplyOffset() {
 void C111::setPowerSupplyOffset(float powerSupplyOffset) {
   this->powerSupplyOffset = powerSupplyOffset;
 }
-
-void C111::resetFaultLatch() {
-  //To reset a latched fault, pull the line low, wait, then pull it high again.
-  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, LOW);
-  delayMicroseconds(20);
-  digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
-}

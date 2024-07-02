@@ -61,8 +61,6 @@ public:
 
     uint16_t getLineLevelAudio();
 
-    void resetFaultLatch();
-
 private:
     TwoWire wire;
     TMP1075::TMP1075 tempSensor;
