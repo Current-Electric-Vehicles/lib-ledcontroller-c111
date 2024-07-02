@@ -62,8 +62,13 @@ bool C111::initialize() {
   pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR, ANALOG);
 
   // highside switch monitor selection
+  this->setPSU1Enabled(false);
+  this->setPSU2Enabled(false);
   pinMode(C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE, OUTPUT);
   pinMode(C111_ESP_HIGHSIDESWITCH_CHANNEL_2_ENABLE, OUTPUT);
+  this->setPSU1Enabled(false);
+  this->setPSU2Enabled(false);
+  
   pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, OUTPUT);
   pinMode(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, OUTPUT);
   pinMode(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, OUTPUT);
@@ -91,6 +96,8 @@ bool C111::initialize() {
   analogReadResolution(12);
 
   // set defaults
+  this->setPSU1Enabled(false);
+  this->setPSU2Enabled(false);
   this->setPowerSupplyScaleFactor(0.007843);
   this->setPowerSupplyOffset(-196);
   this->setPsuScaleFactor(0.0016722);
