@@ -5,7 +5,6 @@
     "license": "MIT",
     "homepage": "https://github.com/Current-Electric-Vehicles/led-controller",
     "frameworks": [
-        "arduino",
         "espidf"
     ],
     "platforms": "espressif32",
@@ -22,8 +21,7 @@
     },
     "dependencies": {
         "Arduino-TMP1075": "https://github.com/PatrickBaus/Arduino-TMP1075",
-        "MCP23008": "https://github.com/RobTillaart/MCP23008",
-        "arduino-CAN": "https://github.com/sandeepmistry/arduino-CAN"
+        "MCP23008": "https://github.com/RobTillaart/MCP23008"
     }
   }
   

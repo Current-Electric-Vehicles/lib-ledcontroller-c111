@@ -18,11 +18,6 @@ static float convertADCToCurrent(int adcValue, float scaleFactor, float offset) 
   return ((adcValue - offset) * scaleFactor);
 }
 
-inline int readADCValue(int adcPin) {
-  adcAttachPin(adcPin);
-  return analogRead(adcPin);
-}
-
 C111::C111() :
     wire(0),
     tempSensor(wire, C111_TEMP_SENSOR_I2C_ADDRESS),
@@ -124,7 +119,7 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 }
 
 float C111::getPowerSupplyVoltage() {
-  int reading = readADCValue(C111_ESP_12V_VOLTAGE_MONITOR);
+  int reading = adc1_get_raw(C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL);
   return ((reading - this->powerSupplyOffset) * this->powerSupplyScaleFactor);
 }
 
@@ -154,9 +149,8 @@ float C111::getPSU1Current() {
     || digitalRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2) != LOW) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    delayMicroseconds(20);
   }
-  auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
@@ -165,9 +159,8 @@ float C111::getPSU1TemperatureCelcius() {
       || digitalRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2) != LOW) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, LOW);
-    delayMicroseconds(20);
   }
-  auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
   return convertADCToTemperature(reading);
 }
 
@@ -176,9 +169,8 @@ float C111::getPSU2Current() {
       || digitalRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2) != HIGH) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, LOW);
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, HIGH);
-    delayMicroseconds(20);
   }
-  auto reading = readADCValue(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR);
+  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
