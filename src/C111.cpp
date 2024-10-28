@@ -23,7 +23,7 @@ C111::C111() :
     tempSensor(wire, C111_TEMP_SENSOR_I2C_ADDRESS),
     ioExpander(C111_IO_EXPANDER_I2C_ADDRESS, &wire),
     initialized(false),
-    overheatTempCelcius(C111_OVERHEATED_TEMP_CELCIUS) {
+    overheatTempCelsius(C111_OVERHEATED_TEMP_CELCIUS) {
 
 }
 
@@ -98,7 +98,7 @@ bool C111::initialize() {
   this->setPsuScaleFactor(0.0016722);
   this->setPsuOffset(-169);
   this->setCanTerminated(false);
-  this->setOverheatTempCelcius(C111_OVERHEATED_TEMP_CELCIUS);
+  this->setOverheatTempCelsius(C111_OVERHEATED_TEMP_CELCIUS);
   this->setPowerSupplyKeepAliveEnabled(true);
 
   return true;
@@ -139,7 +139,7 @@ bool C111::isDifferentialDataEnabled() {
   return digitalRead(C111_ESP_DIFF_OR_SE_SWITCH) == LOW;
 }
 
-float C111::getTemperatureCelcius() {
+float C111::getTemperatureCelsius() {
   tempSensor.setConversionTime(TMP1075::ConversionTime220ms);
   return this->tempSensor.getTemperatureCelsius();
 }
@@ -154,7 +154,7 @@ float C111::getPSU1Current() {
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
-float C111::getPSU1TemperatureCelcius() {
+float C111::getPSU1TemperatureCelsius() {
   if (digitalRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1) != HIGH
       || digitalRead(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2) != LOW) {
     digitalWrite(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, HIGH);
@@ -174,16 +174,16 @@ float C111::getPSU2Current() {
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
-float C111::getPSU2TemperatureCelcius() {
-  return this->getPSU1TemperatureCelcius();
+float C111::getPSU2TemperatureCelsius() {
+  return this->getPSU1TemperatureCelsius();
 }
 
-void C111::setOverheatTempCelcius(float temp) {
-  this->overheatTempCelcius = temp;
+void C111::setOverheatTempCelsius(float temp) {
+  this->overheatTempCelsius = temp;
 }
 
 bool C111::isOverHeated() {
-  return this->getTemperatureCelcius() >= this->overheatTempCelcius;
+  return this->getTemperatureCelsius() >= this->overheatTempCelsius;
 }
 
 void C111::setPSU1Enabled(bool enabled) {

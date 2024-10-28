@@ -27,19 +27,19 @@ public:
     void setDifferentialDataEnabled(bool enabled);
     bool isDifferentialDataEnabled();
 
-    float getTemperatureCelcius();
-    void setOverheatTempCelcius(float temp);
+    float getTemperatureCelsius();
+    void setOverheatTempCelsius(float temp);
     bool isOverHeated();
 
     void resetFaultLatch();
 
     float getPSU1Current();
-    float getPSU1TemperatureCelcius();
+    float getPSU1TemperatureCelsius();
     void setPSU1Enabled(bool enabled);
     bool isPSU1Enabled();
 
     float getPSU2Current();
-    float getPSU2TemperatureCelcius();
+    float getPSU2TemperatureCelsius();
     void setPSU2Enabled(bool enabled);
     bool isPSU2Enabled();
 
@@ -66,7 +66,7 @@ private:
     TMP1075::TMP1075 tempSensor;
     MCP23008 ioExpander;
     bool initialized;
-    float overheatTempCelcius;
+    float overheatTempCelsius;
     float psuOffset;
     float psuScaleFactor;
     float powerSupplyOffset;
