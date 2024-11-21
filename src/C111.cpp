@@ -23,7 +23,7 @@ C111::C111() :
     tempSensor(wire, C111_TEMP_SENSOR_I2C_ADDRESS),
     ioExpander(C111_IO_EXPANDER_I2C_ADDRESS, &wire),
     initialized(false),
-    overheatTempCelsius(C111_OVERHEATED_TEMP_CELCIUS) {
+    overheatTempCelsius(C111_OVERHEATED_TEMP_CELSIUS) {
 
 }
 
@@ -98,7 +98,7 @@ bool C111::initialize() {
   this->setPsuScaleFactor(0.0016722);
   this->setPsuOffset(-169);
   this->setCanTerminated(false);
-  this->setOverheatTempCelsius(C111_OVERHEATED_TEMP_CELCIUS);
+  this->setOverheatTempCelsius(C111_OVERHEATED_TEMP_CELSIUS);
   this->setPowerSupplyKeepAliveEnabled(true);
 
   return true;
@@ -106,7 +106,7 @@ bool C111::initialize() {
 
 void C111::resetFaultLatch() {
   digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, LOW);
-  delayMicroseconds(50);
+  delay(50);
   digitalWrite(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, HIGH);
 }
 
