@@ -2,8 +2,9 @@
 #ifndef C111_ESP_C111_ESP_PINOUT
 #define C111_ESP_C111_ESP_PINOUT
 
-#include <Arduino.h>
 #include <driver/adc.h>
+#include <driver/gpio.h>
+#include <driver/gpio.h>
 
 #define C111_TEMP_SENSOR_I2C_ADDRESS 0b1001000
 #define C111_OVERHEATED_TEMP_CELSIUS 80.0f
@@ -37,7 +38,6 @@
 #define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL     ADC1_CHANNEL_0
 #define C111_ESP_LINE_LEVEL_AUDIO_INPUT_ADC_CHANNEL                 ADC1_CHANNEL_6
 
-#define C111_ESP_RESET                                  3
 #define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR	    GPIO_NUM_36
 #define C111_ESP_IO_EXPANDER_INTERRUPT                  GPIO_NUM_39
 #define C111_ESP_LINE_LEVEL_AUDIO_INPUT                 GPIO_NUM_34
