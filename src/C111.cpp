@@ -97,12 +97,10 @@ bool C111::initialize() {
 
   gpio_set_direction(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, GPIO_MODE_OUTPUT);
   gpio_set_direction(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, GPIO_MODE_OUTPUT);
-  gpio_set_direction(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, GPIO_MODE_OUTPUT);
-  gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 1);
 
   // highside fault latch
-  gpio_set_direction(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, GPIO_MODE_OUTPUT);
-  gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 1);
+  //gpio_set_direction(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, GPIO_MODE_OUTPUT);
+  //gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 1);
 
   // power supply
   gpio_set_direction(C111_ESP_POWER_SUPPLY_KEEP_ALIVE, GPIO_MODE_OUTPUT);
@@ -143,9 +141,9 @@ esp_err_t C111::read_i2c(uint8_t device_addr, uint8_t* read_data, size_t read_le
 }
 
 void C111::resetFaultLatch() {
-  gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 0);
-  vTaskDelay(50);
-  gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 1);
+  //gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 0);
+  //vTaskDelay(50);
+  //gpio_set_level(C111_ESP_HIGHSIDESWITCH_FAULT_LATCH, 1);
 }
 
 void C111::setPowerSupplyKeepAliveEnabled(bool enabled) {
