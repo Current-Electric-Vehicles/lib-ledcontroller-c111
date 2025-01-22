@@ -2,7 +2,7 @@
 #include "C111.h"
 
 #include <esp_log.h>
-#include <driver/adc.h>
+#include <esp_adc/adc_oneshot.h>
 #include <driver/gpio.h>
 #include <driver/i2c.h>
 #include <freertos/FreeRTOS.h>
@@ -88,8 +88,20 @@ bool C111::initialize() {
       C111_IO_EXPANDER_I2C_ADDRESS,
       i2cBuffer.data(), 2));
 
-  adc1_config_width(ADC_WIDTH_BIT_12);
-  adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_12);
+  adc_oneshot_unit_init_cfg_t adc1Config = {
+      .unit_id = ADC_UNIT_1,
+      .clk_src = ADC_RTC_CLK_SRC_DEFAULT,
+      .ulp_mode = ADC_ULP_MODE_DISABLE
+  };
+  ESP_ERROR_CHECK(adc_oneshot_new_unit(&adc1Config, &this->adc1));
+
+  adc_oneshot_chan_cfg_t oneShotConfig = {
+      .atten = ADC_ATTEN_DB_12,
+      .bitwidth = ADC_BITWIDTH_12
+  };
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1, C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL, &oneShotConfig));
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1, C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL, &oneShotConfig));
+  ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1, C111_ESP_LINE_LEVEL_AUDIO_INPUT_ADC_CHANNEL, &oneShotConfig));
 
   // highside switch monitor selection
   gpio_set_direction(C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE, GPIO_MODE_OUTPUT);
@@ -155,7 +167,8 @@ bool C111::isPowerSupplyKeepAliveEnabled() {
 }
 
 float C111::getPowerSupplyVoltage() {
-  int reading = adc1_get_raw(C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL);
+  int reading;
+  ESP_ERROR_CHECK(adc_oneshot_read(this->adc1, C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL, &reading));
   return ((reading - this->powerSupplyOffset) * this->powerSupplyScaleFactor);
 }
 
@@ -197,7 +210,8 @@ float C111::getPSU1Current() {
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, 0);
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, 0);
   }
-  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
+  int reading;
+  ESP_ERROR_CHECK(adc_oneshot_read(this->adc1, C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL, &reading));
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
@@ -207,7 +221,8 @@ float C111::getPSU1TemperatureCelsius() {
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, 1);
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, 0);
   }
-  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
+  int reading;
+  ESP_ERROR_CHECK(adc_oneshot_read(this->adc1, C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL, &reading));
   return convertADCToTemperature(reading);
 }
 
@@ -217,7 +232,8 @@ float C111::getPSU2Current() {
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_1, 0);
     gpio_set_level(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_SELECT_2, 1);
   }
-  auto reading = adc1_get_raw(C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL);
+  int reading;
+  ESP_ERROR_CHECK(adc_oneshot_read(this->adc1, C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL, &reading));
   return convertADCToCurrent(reading, this->psuScaleFactor, this->psuOffset);
 }
 
@@ -278,7 +294,9 @@ std::array<uint8_t, 8> C111::getUserInputState() {
 }
 
 uint16_t C111::getLineLevelAudio() {
-  return adc1_get_raw(ADC1_CHANNEL_6);
+  int reading;
+  ESP_ERROR_CHECK(adc_oneshot_read(this->adc1, C111_ESP_LINE_LEVEL_AUDIO_INPUT_ADC_CHANNEL, &reading));
+  return reading;
 }
 
 float C111::getPsuScaleFactor() {

@@ -2,7 +2,7 @@
 #ifndef C111_ESP_C111_ESP_PINOUT
 #define C111_ESP_C111_ESP_PINOUT
 
-#include <driver/adc.h>
+#include <esp_adc/adc_oneshot.h>
 #include <driver/gpio.h>
 #include <driver/gpio.h>
 
@@ -34,16 +34,16 @@
 #define C111_USER_INPUT_7 7
 #define C111_USER_INPUT_8 8
 
-#define C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL                    ADC1_CHANNEL_7
-#define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL     ADC1_CHANNEL_0
-#define C111_ESP_LINE_LEVEL_AUDIO_INPUT_ADC_CHANNEL                 ADC1_CHANNEL_6
+#define C111_ESP_12V_VOLTAGE_MONITOR_ADC_CHANNEL                    ADC_CHANNEL_7
+#define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR_ADC_CHANNEL     ADC_CHANNEL_0
+#define C111_ESP_LINE_LEVEL_AUDIO_INPUT_ADC_CHANNEL                 ADC_CHANNEL_6
 
 #define C111_ESP_HIGHSIDESWITCH_DIAGNOSTICS_MONITOR	    GPIO_NUM_36
 #define C111_ESP_IO_EXPANDER_INTERRUPT                  GPIO_NUM_39
 #define C111_ESP_LINE_LEVEL_AUDIO_INPUT                 GPIO_NUM_34
 #define C111_ESP_12V_VOLTAGE_MONITOR                    GPIO_NUM_35
 #define C111_ESP_DATA_3	                                GPIO_NUM_33
-#define C111_ESP_DATA_4      	                          GPIO_NUM_32
+#define C111_ESP_DATA_4      	                        GPIO_NUM_32
 #define C111_ESP_HIGHSIDESWITCH_CHANNEL_1_ENABLE        GPIO_NUM_25
 #define C111_ESP_I2C_SCL                                GPIO_NUM_26
 #define C111_ESP_HIGHSIDESWITCH_CHANNEL_2_ENABLE        GPIO_NUM_27

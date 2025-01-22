@@ -4,6 +4,7 @@
 
 #include "C111_Pinout.h"
 #include <driver/i2c.h>
+#include <esp_adc/adc_oneshot.h>
 
 #include <array>
 #include <functional>
@@ -71,6 +72,7 @@ private:
   float psuScaleFactor;
   float powerSupplyOffset;
   float powerSupplyScaleFactor;
+  adc_oneshot_unit_handle_t adc1;
 };
 
 #endif
