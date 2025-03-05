@@ -6,6 +6,7 @@
 #include <driver/gpio.h>
 #include <driver/i2c.h>
 #include <freertos/FreeRTOS.h>
+#include <cstring>
 
 #define TAG ((const char*)("C111"))
 
@@ -55,16 +56,15 @@ C111::C111() :
 
 bool C111::initialize() {
 
-  i2c_config_t i2c_config = {
-      .mode = I2C_MODE_MASTER,
-      .sda_io_num = C111_ESP_I2C_SDA,
-      .scl_io_num = C111_ESP_I2C_SCL,
-      .sda_pullup_en = GPIO_PULLUP_ENABLE,
-      .scl_pullup_en = GPIO_PULLUP_ENABLE,
-      .master = {
-          .clk_speed = 100000
-      }
-  };
+  i2c_config_t i2c_config;
+  std::memset(&i2c_config, 0, sizeof(i2c_config));
+
+  i2c_config.mode = I2C_MODE_MASTER;
+  i2c_config.sda_io_num = C111_ESP_I2C_SDA;
+  i2c_config.scl_io_num = C111_ESP_I2C_SCL;
+  i2c_config.sda_pullup_en = GPIO_PULLUP_ENABLE;
+  i2c_config.scl_pullup_en = GPIO_PULLUP_ENABLE;
+  i2c_config.master.clk_speed = 100000;
 
   ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &i2c_config));
   ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0));
